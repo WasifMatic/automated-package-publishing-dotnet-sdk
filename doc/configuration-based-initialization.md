@@ -16,9 +16,9 @@ The following code sample demonstrates how to initialize the SDK client using an
 The `Builder.FromConfiguration` method reads values from the provided configuration section and returns a builder instance, allowing you to override specific properties directly in code if needed before building the final client.
 
 ```csharp
-using SwaggerPetstoreOpenApi31.Standard;
+using SwaggerPetstoreOpenApi30.Standard;
 using Microsoft.Extensions.Configuration;
-using Environment = SwaggerPetstoreOpenApi31.Standard.Environment;
+using Environment = SwaggerPetstoreOpenApi30.Standard.Environment;
 
 namespace ConsoleApp;
 
@@ -29,8 +29,8 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 // Instantiate your SDK builder and configure it from IConfiguration with overrides
-var client = SwaggerPetstoreOpenApi31Client.Builder
-    .FromConfiguration(configuration.GetSection("SwaggerPetstoreOpenApi31"))
+var client = SwaggerPetstoreOpenApi30Client.Builder
+    .FromConfiguration(configuration.GetSection("SwaggerPetstoreOpenApi30"))
     .Environment(Environment.Production)
     .HttpClientConfig(c => c.Timeout(TimeSpan.FromSeconds(60)))
     .Build();
@@ -40,7 +40,7 @@ var client = SwaggerPetstoreOpenApi31Client.Builder
 
 ```csharp
 {
-  "SwaggerPetstoreOpenApi31": {
+  "SwaggerPetstoreOpenApi30": {
     "Environment": "production",
     "PetstoreAuthCredentials": {
       "OauthClientId": "oauthClientId",

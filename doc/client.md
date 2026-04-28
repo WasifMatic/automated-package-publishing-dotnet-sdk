@@ -18,14 +18,14 @@ The API client can be initialized as follows:
 
 ```csharp
 using Microsoft.Extensions.Logging;
-using SwaggerPetstoreOpenApi31.Standard;
-using SwaggerPetstoreOpenApi31.Standard.Authentication;
-using SwaggerPetstoreOpenApi31.Standard.Models;
+using SwaggerPetstoreOpenApi30.Standard;
+using SwaggerPetstoreOpenApi30.Standard.Authentication;
+using SwaggerPetstoreOpenApi30.Standard.Models;
 using System.Collections.Generic;
 
 namespace ConsoleApp;
 
-SwaggerPetstoreOpenApi31Client client = new SwaggerPetstoreOpenApi31Client.Builder()
+SwaggerPetstoreOpenApi30Client client = new SwaggerPetstoreOpenApi30Client.Builder()
     .PetstoreAuthCredentials(
         new PetstoreAuthModel.Builder(
             "OAuthClientId",
@@ -45,7 +45,7 @@ SwaggerPetstoreOpenApi31Client client = new SwaggerPetstoreOpenApi31Client.Build
         .Build())
     .HttpClientConfig(httpClientConfig =>
         httpClientConfig.Timeout(TimeSpan.FromSeconds(100)))
-    .Environment(SwaggerPetstoreOpenApi31.Standard.Environment.Production)
+    .Environment(SwaggerPetstoreOpenApi30.Standard.Environment.Production)
     .LoggingConfig(config => config
         .LogLevel(LogLevel.Information)
         .RequestConfig(reqConfig => reqConfig.Body(true))
@@ -57,7 +57,7 @@ SwaggerPetstoreOpenApi31Client client = new SwaggerPetstoreOpenApi31Client.Build
 ## Configuration-Based Initialization
 
 ```csharp
-using SwaggerPetstoreOpenApi31.Standard;
+using SwaggerPetstoreOpenApi30.Standard;
 using Microsoft.Extensions.Configuration;
 
 namespace ConsoleApp;
@@ -69,13 +69,13 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 // Instantiate your SDK and configure it from IConfiguration
-var client = SwaggerPetstoreOpenApi31Client
-    .FromConfiguration(configuration.GetSection("SwaggerPetstoreOpenApi31"));
+var client = SwaggerPetstoreOpenApi30Client
+    .FromConfiguration(configuration.GetSection("SwaggerPetstoreOpenApi30"));
 ```
 
 See the [Configuration-Based Initialization](../doc/configuration-based-initialization.md) section for details.
 
-## Swagger Petstore - OpenAPI 3.1Client Class
+## Swagger Petstore - OpenAPI 3.0Client Class
 
 The gateway for the SDK. This class acts as a factory for the Apis and also holds the configuration of the SDK.
 
@@ -102,11 +102,11 @@ The gateway for the SDK. This class acts as a factory for the Apis and also hold
 | Name | Description | Return Type |
 |  --- | --- | --- |
 | `GetBaseUri(Server alias = Server.Default)` | Gets the URL for a particular alias in the current environment and appends it with template parameters. | `string` |
-| `ToBuilder()` | Creates an object of the Swagger Petstore - OpenAPI 3.1Client using the values provided for the builder. | `Builder` |
+| `ToBuilder()` | Creates an object of the Swagger Petstore - OpenAPI 3.0Client using the values provided for the builder. | `Builder` |
 
-## Swagger Petstore - OpenAPI 3.1Client Builder Class
+## Swagger Petstore - OpenAPI 3.0Client Builder Class
 
-Class to build instances of Swagger Petstore - OpenAPI 3.1Client.
+Class to build instances of Swagger Petstore - OpenAPI 3.0Client.
 
 ### Methods
 

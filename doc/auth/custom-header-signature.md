@@ -22,12 +22,12 @@ Documentation for accessing and setting credentials for api_key.
 You must provide credentials in the client as shown in the following code snippet.
 
 ```csharp
-using SwaggerPetstoreOpenApi31.Standard;
-using SwaggerPetstoreOpenApi31.Standard.Authentication;
+using SwaggerPetstoreOpenApi30.Standard;
+using SwaggerPetstoreOpenApi30.Standard.Authentication;
 
 namespace ConsoleApp;
 
-SwaggerPetstoreOpenApi31Client client = new SwaggerPetstoreOpenApi31Client.Builder()
+SwaggerPetstoreOpenApi30Client client = new SwaggerPetstoreOpenApi30Client.Builder()
     .ApiKeyCredentials(
         new ApiKeyModel.Builder(
             "api_key"

@@ -1,9 +1,9 @@
 
-# Getting Started with Swagger Petstore - OpenAPI 3.1
+# Getting Started with Swagger Petstore - OpenAPI 3.0
 
 ## Introduction
 
-This is a sample Pet Store Server based on the OpenAPI 3.1 specification.  You can find out more about
+This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
 Swagger at [https://swagger.io](https://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!
 You can now help us improve the API whether it's by making changes to the definition itself or to the code.
 That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
@@ -20,11 +20,11 @@ Find out more about Swagger: [https://swagger.io](https://swagger.io)
 If you are building with .NET CLI tools then you can also use the following command:
 
 ```bash
-dotnet add package AutomatedPackagePublishingSDK --version 7.0.2
+dotnet add package AutomatedPackagePublishingSDK --version 8.0.1
 ```
 
 You can also view the package at:
-https://www.nuget.org/packages/AutomatedPackagePublishingSDK/7.0.2
+https://www.nuget.org/packages/AutomatedPackagePublishingSDK/8.0.1
 
 ## Initialize the API Client
 
@@ -47,14 +47,14 @@ The API client can be initialized as follows:
 
 ```csharp
 using Microsoft.Extensions.Logging;
-using SwaggerPetstoreOpenApi31.Standard;
-using SwaggerPetstoreOpenApi31.Standard.Authentication;
-using SwaggerPetstoreOpenApi31.Standard.Models;
+using SwaggerPetstoreOpenApi30.Standard;
+using SwaggerPetstoreOpenApi30.Standard.Authentication;
+using SwaggerPetstoreOpenApi30.Standard.Models;
 using System.Collections.Generic;
 
 namespace ConsoleApp;
 
-SwaggerPetstoreOpenApi31Client client = new SwaggerPetstoreOpenApi31Client.Builder()
+SwaggerPetstoreOpenApi30Client client = new SwaggerPetstoreOpenApi30Client.Builder()
     .PetstoreAuthCredentials(
         new PetstoreAuthModel.Builder(
             "OAuthClientId",
@@ -74,7 +74,7 @@ SwaggerPetstoreOpenApi31Client client = new SwaggerPetstoreOpenApi31Client.Build
         .Build())
     .HttpClientConfig(httpClientConfig =>
         httpClientConfig.Timeout(TimeSpan.FromSeconds(100)))
-    .Environment(SwaggerPetstoreOpenApi31.Standard.Environment.Production)
+    .Environment(SwaggerPetstoreOpenApi30.Standard.Environment.Production)
     .LoggingConfig(config => config
         .LogLevel(LogLevel.Information)
         .RequestConfig(reqConfig => reqConfig.Body(true))
@@ -86,7 +86,7 @@ SwaggerPetstoreOpenApi31Client client = new SwaggerPetstoreOpenApi31Client.Build
 ### Configuration-Based Initialization
 
 ```csharp
-using SwaggerPetstoreOpenApi31.Standard;
+using SwaggerPetstoreOpenApi30.Standard;
 using Microsoft.Extensions.Configuration;
 
 namespace ConsoleApp;
@@ -98,8 +98,8 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 // Instantiate your SDK and configure it from IConfiguration
-var client = SwaggerPetstoreOpenApi31Client
-    .FromConfiguration(configuration.GetSection("SwaggerPetstoreOpenApi31"));
+var client = SwaggerPetstoreOpenApi30Client
+    .FromConfiguration(configuration.GetSection("SwaggerPetstoreOpenApi30"));
 ```
 
 See the [Configuration-Based Initialization](doc/configuration-based-initialization.md) section for details.
