@@ -18,12 +18,12 @@ To configure the SDK to use a proxy server, initialize the proxy configuration d
 ## Usage Example
 
 ```csharp
-using APIMATICCalculator.Standard;
-using APIMATICCalculator.Standard.Http.Client.Proxy;
+using SwiftBankingAPIPortal.Standard;
+using SwiftBankingAPIPortal.Standard.Http.Client.Proxy;
 
 namespace ConsoleApp;
 
-var client = new APIMATICCalculatorClient.Builder()
+var client = new SwiftBankingAPIPortalClient.Builder()
 .HttpClientConfig(config => config
     .Proxy(new ProxyConfigurationBuilder("http://localhost")
             .Port(8080)

@@ -16,9 +16,9 @@ The following code sample demonstrates how to initialize the SDK client using an
 The `Builder.FromConfiguration` method reads values from the provided configuration section and returns a builder instance, allowing you to override specific properties directly in code if needed before building the final client.
 
 ```csharp
-using APIMATICCalculator.Standard;
+using SwiftBankingAPIPortal.Standard;
 using Microsoft.Extensions.Configuration;
-using Environment = APIMATICCalculator.Standard.Environment;
+using Environment = SwiftBankingAPIPortal.Standard.Environment;
 
 namespace ConsoleApp;
 
@@ -29,9 +29,9 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 // Instantiate your SDK builder and configure it from IConfiguration with overrides
-var client = APIMATICCalculatorClient.Builder
-    .FromConfiguration(configuration.GetSection("APIMATICCalculator"))
-    .Environment(Environment.Production)
+var client = SwiftBankingAPIPortalClient.Builder
+    .FromConfiguration(configuration.GetSection("SwiftBankingAPIPortal"))
+    .Environment(Environment.Token)
     .HttpClientConfig(c => c.Timeout(TimeSpan.FromSeconds(60)))
     .Build();
 ```
@@ -40,8 +40,15 @@ var client = APIMATICCalculatorClient.Builder
 
 ```csharp
 {
-  "APIMATICCalculator": {
-    "Environment": "production",
+  "SwiftBankingAPIPortal": {
+    "Environment": "token",
+    "BasicAuthCredentials": {
+      "Username": "username",
+      "Password": "password",
+    },
+    "OauthBearerTokenCredentials": {
+      "AccessToken": "accessToken",
+    },
     "HttpClientConfig": {
       "Timeout": "00:01:00",
       "NumberOfRetries": 3,
