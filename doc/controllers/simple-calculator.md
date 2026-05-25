@@ -30,6 +30,8 @@ CalculateAsync(
 
 ## Response Type
 
+**200**
+
 `Task<double>`
 
 ## Example Usage
