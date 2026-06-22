@@ -18,7 +18,9 @@ Possible operators are sum, subtract, multiply, divide
 
 ## Example
 
-```
-SUM
+```csharp
+using APIMATICCalculator.Standard.Models;
+
+OperationTypeEnum operationType = OperationTypeEnum.SUM;
 ```
 
