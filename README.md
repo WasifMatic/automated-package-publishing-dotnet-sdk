@@ -10,22 +10,22 @@ Simple calculator API hosted on APIMATIC
 If you are building with .NET CLI tools then you can also use the following command:
 
 ```bash
-dotnet add package AutomatedPackagePublishingSDK --version 1.0.30
+dotnet add package AutomatedPackagePublishingSDK --version 1.0.31
 ```
 
 You can also view the package at:
-https://www.nuget.org/packages/AutomatedPackagePublishingSDK/1.0.30
+https://www.nuget.org/packages/AutomatedPackagePublishingSDK/1.0.31
 
 ## Initialize the API Client
 
-**_Note:_** Documentation for the client can be found [here.](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/client.md)
+**_Note:_** Documentation for the client can be found [here.](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/client.md)
 
 The following parameters are configurable for the API Client:
 
 | Parameter | Type | Description |
 |  --- | --- | --- |
 | Timeout | `TimeSpan` | Http client timeout.<br>*Default*: `TimeSpan.FromSeconds(100)` |
-| HttpClientConfiguration | [`Action<HttpClientConfiguration.Builder>`](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/http-client-configuration-builder.md) | Action delegate that configures the HTTP client by using the HttpClientConfiguration.Builder for customizing API call settings.<br>*Default*: `new HttpClient()` |
+| HttpClientConfiguration | [`Action<HttpClientConfiguration.Builder>`](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/http-client-configuration-builder.md) | Action delegate that configures the HTTP client by using the HttpClientConfiguration.Builder for customizing API call settings.<br>*Default*: `new HttpClient()` |
 
 The API client can be initialized as follows:
 
@@ -61,31 +61,31 @@ var client = APIMATICCalculatorClient
     .FromConfiguration(configuration.GetSection("APIMATICCalculator"));
 ```
 
-See the [Configuration-Based Initialization](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/configuration-based-initialization.md) section for details.
+See the [Configuration-Based Initialization](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/configuration-based-initialization.md) section for details.
 
 ## List of APIs
 
-* [Simple Calculator](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/controllers/simple-calculator.md)
+* [Simple Calculator](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/controllers/simple-calculator.md)
 
 ## SDK Infrastructure
 
 ### Configuration
 
-* [Configuration-Based Initialization](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/configuration-based-initialization.md)
-* [HttpClientConfiguration](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/http-client-configuration.md)
-* [HttpClientConfigurationBuilder](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/http-client-configuration-builder.md)
-* [ProxyConfigurationBuilder](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/proxy-configuration-builder.md)
+* [Configuration-Based Initialization](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/configuration-based-initialization.md)
+* [HttpClientConfiguration](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/http-client-configuration.md)
+* [HttpClientConfigurationBuilder](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/http-client-configuration-builder.md)
+* [ProxyConfigurationBuilder](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/proxy-configuration-builder.md)
 
 ### HTTP
 
-* [HttpCallback](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/http-callback.md)
-* [HttpContext](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/http-context.md)
-* [HttpRequest](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/http-request.md)
-* [HttpResponse](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/http-response.md)
-* [HttpStringResponse](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/http-string-response.md)
+* [HttpCallback](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/http-callback.md)
+* [HttpContext](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/http-context.md)
+* [HttpRequest](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/http-request.md)
+* [HttpResponse](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/http-response.md)
+* [HttpStringResponse](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/http-string-response.md)
 
 ### Utilities
 
-* [ApiException](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/api-exception.md)
-* [ApiHelper](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.30/doc/api-helper.md)
+* [ApiException](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/api-exception.md)
+* [ApiHelper](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.31/doc/api-helper.md)
 
