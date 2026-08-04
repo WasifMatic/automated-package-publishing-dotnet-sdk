@@ -16,9 +16,9 @@ The following code sample demonstrates how to initialize the SDK client using an
 The `Builder.FromConfiguration` method reads values from the provided configuration section and returns a builder instance, allowing you to override specific properties directly in code if needed before building the final client.
 
 ```csharp
-using APIMATICCalculator.Standard;
+using UnivaPay;
 using Microsoft.Extensions.Configuration;
-using Environment = APIMATICCalculator.Standard.Environment;
+using Environment = UnivaPay.Environment;
 
 namespace ConsoleApp;
 
@@ -29,8 +29,8 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 // Instantiate your SDK builder and configure it from IConfiguration with overrides
-var client = APIMATICCalculatorClient.Builder
-    .FromConfiguration(configuration.GetSection("APIMATICCalculator"))
+var client = UnivapayClientSdkClient.Builder
+    .FromConfiguration(configuration.GetSection("UnivapayClientSdk"))
     .Environment(Environment.Production)
     .HttpClientConfig(c => c.Timeout(TimeSpan.FromSeconds(60)))
     .Build();
@@ -40,8 +40,50 @@ var client = APIMATICCalculatorClient.Builder
 
 ```csharp
 {
-  "APIMATICCalculator": {
+  "UnivapayClientSdk": {
     "Environment": "production",
+    "BaseUrl": "baseUrl",
+    "BearerAuthCredentials": {
+      "AccessToken": "accessToken",
+    },
+    "LoggingConfig": {
+      "LogLevel": "Debug",
+      "MaskSensitiveHeaders": true,
+      "RequestLoggingConfiguration": {
+        "Body": true,
+        "Headers": true,
+        "IncludeQueryInPath": true,
+        "HeadersToInclude": [
+          "Content-Type",
+          "X-Request-ID"
+        ],
+        "HeadersToExclude": [
+          "Authorization"
+        ],
+        "HeadersToUnmask": [
+          "X-Request-ID"
+        ],
+      },
+      "ResponseLoggingConfiguration": {
+        "Body": true,
+        "Headers": true,
+        "IncludeQueryInPath": true,
+        "HeadersToInclude": [
+          "Content-Type",
+          "X-Correlation-ID",
+          "Date",
+          "Server"
+        ],
+        "HeadersToExclude": [
+          "Set-Cookie",
+          "Authorization",
+          "X-API-Key"
+        ],
+        "HeadersToUnmask": [
+          "X-Correlation-ID"
+        ],
+      }
+    },
     "HttpClientConfig": {
       "Timeout": "00:01:00",
       "NumberOfRetries": 3,
