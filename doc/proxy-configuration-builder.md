@@ -18,12 +18,12 @@ To configure the SDK to use a proxy server, initialize the proxy configuration d
 ## Usage Example
 
 ```csharp
-using UnivapayClientSdk.Standard;
-using UnivapayClientSdk.Standard.Http.Client.Proxy;
+using APIMATICCalculator.Standard;
+using APIMATICCalculator.Standard.Http.Client.Proxy;
 
 namespace ConsoleApp;
 
-var client = new UnivapayClientSdkClient.Builder()
+var client = new APIMATICCalculatorClient.Builder()
 .HttpClientConfig(config => config
     .Proxy(new ProxyConfigurationBuilder("http://localhost")
             .Port(8080)
