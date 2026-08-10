@@ -16,9 +16,9 @@ The following code sample demonstrates how to initialize the SDK client using an
 The `Builder.FromConfiguration` method reads values from the provided configuration section and returns a builder instance, allowing you to override specific properties directly in code if needed before building the final client.
 
 ```csharp
-using SwaggerPetstoreOpenApi30.Standard;
+using APIMATICCalculator.Standard;
 using Microsoft.Extensions.Configuration;
-using Environment = SwaggerPetstoreOpenApi30.Standard.Environment;
+using Environment = APIMATICCalculator.Standard.Environment;
 
 namespace ConsoleApp;
 
@@ -29,8 +29,8 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 // Instantiate your SDK builder and configure it from IConfiguration with overrides
-var client = SwaggerPetstoreOpenApi30Client.Builder
-    .FromConfiguration(configuration.GetSection("SwaggerPetstoreOpenApi30"))
+var client = APIMATICCalculatorClient.Builder
+    .FromConfiguration(configuration.GetSection("APIMATICCalculator"))
     .Environment(Environment.Production)
     .HttpClientConfig(c => c.Timeout(TimeSpan.FromSeconds(60)))
     .Build();
@@ -40,54 +40,8 @@ var client = SwaggerPetstoreOpenApi30Client.Builder
 
 ```csharp
 {
-  "SwaggerPetstoreOpenApi30": {
+  "APIMATICCalculator": {
     "Environment": "production",
-    "PetstoreAuthCredentials": {
-      "OauthClientId": "oauthClientId",
-      "OauthRedirectUri": "oauthRedirectUri",
-      "OauthScopes": [],
-    },
-    "ApiKeyCredentials": {
-      "ApiKey": "apiKey",
-    },
-    "LoggingConfig": {
-      "LogLevel": "Debug",
-      "MaskSensitiveHeaders": true,
-      "RequestLoggingConfiguration": {
-        "Body": true,
-        "Headers": true,
-        "IncludeQueryInPath": true,
-        "HeadersToInclude": [
-          "Content-Type",
-          "X-Request-ID"
-        ],
-        "HeadersToExclude": [
-          "Authorization"
-        ],
-        "HeadersToUnmask": [
-          "X-Request-ID"
-        ],
-      },
-      "ResponseLoggingConfiguration": {
-        "Body": true,
-        "Headers": true,
-        "IncludeQueryInPath": true,
-        "HeadersToInclude": [
-          "Content-Type",
-          "X-Correlation-ID",
-          "Date",
-          "Server"
-        ],
-        "HeadersToExclude": [
-          "Set-Cookie",
-          "Authorization",
-          "X-API-Key"
-        ],
-        "HeadersToUnmask": [
-          "X-Correlation-ID"
-        ],
-      }
-    },
     "HttpClientConfig": {
       "Timeout": "00:01:00",
       "NumberOfRetries": 3,
