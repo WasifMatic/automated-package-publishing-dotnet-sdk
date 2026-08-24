@@ -1,0 +1,28 @@
+
+# Universal Product Code
+
+The Universal Product Code of the item.
+
+## Structure
+
+`UniversalProductCode`
+
+## Fields
+
+| Name | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `Type` | [`UpcType`](../../doc/models/upc-type.md) | Required | The Universal Product Code type.<br><br>**Constraints**: *Minimum Length*: `1`, *Maximum Length*: `5`, *Pattern*: `^[0-9A-Z_-]+$` |
+| `Code` | `string` | Required | The UPC product code of the item.<br><br>**Constraints**: *Minimum Length*: `6`, *Maximum Length*: `17`, *Pattern*: `^[0-9]{0,17}$` |
+
+## Example
+
+```csharp
+using PaypalServer.Standard.Models;
+
+UniversalProductCode universalProductCode = new UniversalProductCode
+{
+    Type = UpcType.Upc2,
+    Code = "code0",
+};
+```
+

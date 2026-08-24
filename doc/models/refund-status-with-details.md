@@ -1,0 +1,30 @@
+
+# Refund Status with Details
+
+The refund status with details.
+
+## Structure
+
+`RefundStatusWithDetails`
+
+## Fields
+
+| Name | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `Status` | [`RefundStatus?`](../../doc/models/refund-status.md) | Optional, Read-only | The status of the refund. |
+| `StatusDetails` | [`RefundStatusDetails`](../../doc/models/refund-status-details.md) | Optional | The details of the refund status. |
+
+## Example
+
+```csharp
+using PaypalServer.Standard.Models;
+
+RefundStatusWithDetails refundStatusWithDetails = new RefundStatusWithDetails
+{
+    StatusDetails = new RefundStatusDetails
+    {
+        Reason = RefundIncompleteReason.Echeck,
+    },
+};
+```
+

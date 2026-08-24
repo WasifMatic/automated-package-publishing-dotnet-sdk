@@ -1,0 +1,41 @@
+
+# Subscription Application Context
+
+The application context, which customizes the payer experience during the subscription approval process with PayPal.
+
+## Structure
+
+`SubscriptionApplicationContext`
+
+## Fields
+
+| Name | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `BrandName` | `string` | Optional | The label that overrides the business name in the PayPal account on the PayPal site.<br><br>**Constraints**: *Minimum Length*: `1`, *Maximum Length*: `127`, *Pattern*: `^.*$` |
+| `Locale` | `string` | Optional | The BCP 47-formatted locale of pages that the PayPal payment experience shows. PayPal supports a five-character code. For example, `da-DK`, `he-IL`, `id-ID`, `ja-JP`, `no-NO`, `pt-BR`, `ru-RU`, `sv-SE`, `th-TH`, `zh-CN`, `zh-HK`, or `zh-TW`.<br><br>**Constraints**: *Minimum Length*: `2`, *Maximum Length*: `10`, *Pattern*: `^[a-z]{2}(?:-[A-Z][a-z]{3})?(?:-(?:[A-Z]{2}\|[0-9]{3}))?$` |
+| `ShippingPreference` | [`ExperienceContextShippingPreference?`](../../doc/models/experience-context-shipping-preference.md) | Optional | The location from which the shipping address is derived.<br><br>**Default**: `ExperienceContextShippingPreference.GET_FROM_FILE`<br><br>**Constraints**: *Minimum Length*: `1`, *Maximum Length*: `24`, *Pattern*: `^[A-Z_]+$` |
+| `UserAction` | [`ApplicationContextUserAction?`](../../doc/models/application-context-user-action.md) | Optional | Configures the label name to `Continue` or `Subscribe Now` for subscription consent experience.<br><br>**Default**: `ApplicationContextUserAction.SUBSCRIBE_NOW`<br><br>**Constraints**: *Minimum Length*: `1`, *Maximum Length*: `24`, *Pattern*: `^[A-Z_]+$` |
+| `PaymentMethod` | [`PaymentMethod`](../../doc/models/payment-method.md) | Optional | The customer and merchant payment preferences. |
+| `ReturnUrl` | `string` | Required | The URL where the customer is redirected after the customer approves the payment.<br><br>**Constraints**: *Minimum Length*: `10`, *Maximum Length*: `4000` |
+| `CancelUrl` | `string` | Required | The URL where the customer is redirected after the customer cancels the payment.<br><br>**Constraints**: *Minimum Length*: `10`, *Maximum Length*: `4000` |
+
+## Example
+
+```csharp
+using PaypalServer.Standard.Models;
+
+SubscriptionApplicationContext subscriptionApplicationContext = new SubscriptionApplicationContext
+{
+    ReturnUrl = "return_url2",
+    CancelUrl = "cancel_url4",
+    BrandName = "brand_name0",
+    Locale = "locale4",
+    ShippingPreference = ExperienceContextShippingPreference.GetFromFile,
+    UserAction = ApplicationContextUserAction.SubscribeNow,
+    PaymentMethod = new PaymentMethod
+    {
+        PayeePreferred = PayeePaymentMethodPreference.Unrestricted,
+    },
+};
+```
+

@@ -1,0 +1,32 @@
+
+# Blik One Click Payment Request
+
+Information used to pay using BLIK one-click flow.
+
+## Structure
+
+`BlikOneClickPaymentRequest`
+
+## Fields
+
+| Name | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `AuthCode` | `string` | Optional | The 6-digit code used to authenticate a consumer within BLIK.<br><br>**Constraints**: *Minimum Length*: `6`, *Maximum Length*: `6`, *Pattern*: `^[0-9]{6}$` |
+| `ConsumerReference` | `string` | Required | The merchant generated, unique reference serving as a primary identifier for accounts connected between Blik and a merchant.<br><br>**Constraints**: *Minimum Length*: `3`, *Maximum Length*: `64`, *Pattern*: `^[ -~]{3,64}$` |
+| `AliasLabel` | `string` | Optional | A bank defined identifier used as a display name to allow the payer to differentiate between multiple registered bank accounts.<br><br>**Constraints**: *Minimum Length*: `8`, *Maximum Length*: `35`, *Pattern*: `^[ -~]{8,35}$` |
+| `AliasKey` | `string` | Optional | A Blik-defined identifier for a specific Blik-enabled bank account that is associated with a given merchant. Used only in conjunction with a Consumer Reference.<br><br>**Constraints**: *Minimum Length*: `1`, *Maximum Length*: `19`, *Pattern*: `^[0-9]+$` |
+
+## Example
+
+```csharp
+using PaypalServer.Standard.Models;
+
+BlikOneClickPaymentRequest blikOneClickPaymentRequest = new BlikOneClickPaymentRequest
+{
+    ConsumerReference = "consumer_reference2",
+    AuthCode = "auth_code4",
+    AliasLabel = "alias_label2",
+    AliasKey = "alias_key0",
+};
+```
+

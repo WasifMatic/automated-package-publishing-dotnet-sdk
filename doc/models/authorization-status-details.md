@@ -1,0 +1,26 @@
+
+# Authorization Status Details
+
+The details of the authorized payment status.
+
+## Structure
+
+`AuthorizationStatusDetails`
+
+## Fields
+
+| Name | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `Reason` | [`AuthorizationIncompleteReason?`](../../doc/models/authorization-incomplete-reason.md) | Optional | The reason why the authorized status is `PENDING`.<br><br>**Constraints**: *Minimum Length*: `1`, *Maximum Length*: `64`, *Pattern*: `^[A-Z_]+$` |
+
+## Example
+
+```csharp
+using PaypalServer.Standard.Models;
+
+AuthorizationStatusDetails authorizationStatusDetails = new AuthorizationStatusDetails
+{
+    Reason = AuthorizationIncompleteReason.PendingReview,
+};
+```
+

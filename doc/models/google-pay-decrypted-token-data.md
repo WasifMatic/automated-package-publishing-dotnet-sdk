@@ -1,0 +1,44 @@
+
+# Google Pay Decrypted Token Data
+
+Details shared by Google for the merchant to be shared with PayPal. This is required to process the transaction using the Google Pay payment method.
+
+## Structure
+
+`GooglePayDecryptedTokenData`
+
+## Fields
+
+| Name | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `MessageId` | `string` | Optional | A unique ID that identifies the message in case it needs to be revoked or located at a later time.<br><br>**Constraints**: *Minimum Length*: `1`, *Maximum Length*: `250`, *Pattern*: `^.*$` |
+| `MessageExpiration` | `string` | Optional | Date and time at which the message expires as UTC milliseconds since epoch. Integrators should reject any message that's expired.<br><br>**Constraints**: *Minimum Length*: `13`, *Maximum Length*: `13`, *Pattern*: `\d{13}` |
+| `PaymentMethod` | [`GooglePayPaymentMethod`](../../doc/models/google-pay-payment-method.md) | Required | The type of the payment credential. Currently, only CARD is supported.<br><br>**Constraints**: *Minimum Length*: `4`, *Maximum Length*: `4` |
+| `Card` | [`GooglePayCard`](../../doc/models/google-pay-card.md) | Required | The payment card used to fund a Google Pay payment. Can be a credit or debit card. |
+| `AuthenticationMethod` | [`GooglePayAuthenticationMethod`](../../doc/models/google-pay-authentication-method.md) | Required | Authentication Method which is used for the card transaction.<br><br>**Constraints**: *Minimum Length*: `1`, *Maximum Length*: `50` |
+| `Cryptogram` | `string` | Optional | Base-64 cryptographic identifier used by card schemes to validate the token verification result. This is a conditionally required field if authentication_method is CRYPTOGRAM_3DS.<br><br>**Constraints**: *Minimum Length*: `1`, *Maximum Length*: `2000` |
+| `EciIndicator` | `string` | Optional | Electronic Commerce Indicator may not always be present. It is only returned for tokens on the Visa card network. This value is passed through in the payment authorization request.<br><br>**Constraints**: *Minimum Length*: `1`, *Maximum Length*: `256`, *Pattern*: `^.*$` |
+
+## Example
+
+```csharp
+using PaypalServer.Standard.Models;
+
+GooglePayDecryptedTokenData googlePayDecryptedTokenData = new GooglePayDecryptedTokenData
+{
+    PaymentMethod = GooglePayPaymentMethod.Card,
+    Card = new GooglePayCard
+    {
+        Name = "name6",
+        Number = "number6",
+        Expiry = "expiry4",
+        Type = CardType.Unknown,
+    },
+    AuthenticationMethod = GooglePayAuthenticationMethod.PanOnly,
+    MessageId = "message_id8",
+    MessageExpiration = "message_expiration0",
+    Cryptogram = "cryptogram8",
+    EciIndicator = "eci_indicator2",
+};
+```
+

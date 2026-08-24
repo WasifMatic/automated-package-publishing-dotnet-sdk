@@ -1,0 +1,34 @@
+
+# Transaction Search Error Details
+
+The error details. Required for client-side `4XX` errors.
+
+## Structure
+
+`TransactionSearchErrorDetails`
+
+## Fields
+
+| Name | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `Field` | `string` | Optional | The field that caused the error. If this field is in the body, set this value to the field's JSON pointer value. Required for client-side errors. |
+| `MValue` | `string` | Optional | The value of the field that caused the error. |
+| `Location` | `string` | Optional | The location of the field that caused the error. Value is `body`, `path`, or `query`.<br><br>**Default**: `"body"` |
+| `Issue` | `string` | Required | The unique, fine-grained application-level error code. |
+| `Description` | `string` | Optional | The human-readable description for an issue. The description can change over the lifetime of an API, so clients must not depend on this value. |
+
+## Example
+
+```csharp
+using PaypalServer.Standard.Models;
+
+TransactionSearchErrorDetails transactionSearchErrorDetails = new TransactionSearchErrorDetails
+{
+    Issue = "issue8",
+    Field = "field6",
+    MValue = "value4",
+    Location = "body",
+    Description = "description2",
+};
+```
+
