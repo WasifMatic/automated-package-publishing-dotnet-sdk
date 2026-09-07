@@ -5,45 +5,28 @@ The following parameters are configurable for the API Client:
 
 | Parameter | Type | Description |
 |  --- | --- | --- |
-| Environment | [`Environment`](../README.md#environments) | The API environment. <br> **Default: `Environment.Sandbox`** |
 | Timeout | `TimeSpan` | Http client timeout.<br>*Default*: `TimeSpan.FromSeconds(100)` |
 | HttpClientConfiguration | [`Action<HttpClientConfiguration.Builder>`](../doc/http-client-configuration-builder.md) | Action delegate that configures the HTTP client by using the HttpClientConfiguration.Builder for customizing API call settings.<br>*Default*: `new HttpClient()` |
-| LogBuilder | [`LogBuilder`](../doc/log-builder.md) | Represents the logging configuration builder for API calls |
-| ClientCredentialsAuth | [`ClientCredentialsAuth`](auth/oauth-2-client-credentials-grant.md) | The Credentials Setter for OAuth 2 Client Credentials Grant |
 
 The API client can be initialized as follows:
 
 ## Code-Based Initialization
 
 ```csharp
-using Microsoft.Extensions.Logging;
-using PaypalServer.Standard;
-using PaypalServer.Standard.Authentication;
+using APIMATICCalculator.Standard;
 
 namespace ConsoleApp;
 
-PaypalServerClient client = new PaypalServerClient.Builder()
-    .ClientCredentialsAuth(
-        new ClientCredentialsAuthModel.Builder(
-            "OAuthClientId",
-            "OAuthClientSecret"
-        )
-        .Build())
+APIMATICCalculatorClient client = new APIMATICCalculatorClient.Builder()
     .HttpClientConfig(httpClientConfig =>
         httpClientConfig.Timeout(TimeSpan.FromSeconds(100)))
-    .Environment(PaypalServer.Standard.Environment.Sandbox)
-    .LoggingConfig(config => config
-        .LogLevel(LogLevel.Information)
-        .RequestConfig(reqConfig => reqConfig.Body(true))
-        .ResponseConfig(respConfig => respConfig.Headers(true))
-    )
     .Build();
 ```
 
 ## Configuration-Based Initialization
 
 ```csharp
-using PaypalServer.Standard;
+using APIMATICCalculator.Standard;
 using Microsoft.Extensions.Configuration;
 
 namespace ConsoleApp;
@@ -55,13 +38,13 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 // Instantiate your SDK and configure it from IConfiguration
-var client = PaypalServerClient
-    .FromConfiguration(configuration.GetSection("PaypalServer"));
+var client = APIMATICCalculatorClient
+    .FromConfiguration(configuration.GetSection("APIMATICCalculator"));
 ```
 
 See the [Configuration-Based Initialization](../doc/configuration-based-initialization.md) section for details.
 
-## PayPal ServerClient Class
+## APIMATIC CalculatorClient Class
 
 The gateway for the SDK. This class acts as a factory for the Controllers and also holds the configuration of the SDK.
 
@@ -69,12 +52,7 @@ The gateway for the SDK. This class acts as a factory for the Controllers and al
 
 | Name | Description |
 |  --- | --- |
-| OrdersController | Gets OrdersController controller. |
-| PaymentsController | Gets PaymentsController controller. |
-| VaultController | Gets VaultController controller. |
-| TransactionSearchController | Gets TransactionSearchController controller. |
-| SubscriptionsController | Gets SubscriptionsController controller. |
-| OAuthAuthorizationController | Gets OAuthAuthorizationController controller. |
+| SimpleCalculatorController | Gets SimpleCalculatorController controller. |
 
 ### Properties
 
@@ -83,18 +61,17 @@ The gateway for the SDK. This class acts as a factory for the Controllers and al
 | HttpClientConfiguration | Gets the configuration of the Http Client associated with this client. | [`IHttpClientConfiguration`](../doc/http-client-configuration.md) |
 | Timeout | Http client timeout. | `TimeSpan` |
 | Environment | Current API environment. | `Environment` |
-| ClientCredentialsAuth | Gets the credentials to use with ClientCredentialsAuth. | [`IClientCredentialsAuth`](auth/oauth-2-client-credentials-grant.md) |
 
 ### Methods
 
 | Name | Description | Return Type |
 |  --- | --- | --- |
 | `GetBaseUri(Server alias = Server.Default)` | Gets the URL for a particular alias in the current environment and appends it with template parameters. | `string` |
-| `ToBuilder()` | Creates an object of the PayPal ServerClient using the values provided for the builder. | `Builder` |
+| `ToBuilder()` | Creates an object of the APIMATIC CalculatorClient using the values provided for the builder. | `Builder` |
 
-## PayPal ServerClient Builder Class
+## APIMATIC CalculatorClient Builder Class
 
-Class to build instances of PayPal ServerClient.
+Class to build instances of APIMATIC CalculatorClient.
 
 ### Methods
 
@@ -103,5 +80,4 @@ Class to build instances of PayPal ServerClient.
 | `HttpClientConfiguration(Action<`[`HttpClientConfiguration.Builder`](../doc/http-client-configuration-builder.md)`> action)` | Gets the configuration of the Http Client associated with this client. | `Builder` |
 | `Timeout(TimeSpan timeout)` | Http client timeout. | `Builder` |
 | `Environment(Environment environment)` | Current API environment. | `Builder` |
-| `ClientCredentialsAuth(Action<ClientCredentialsAuthModel.Builder> action)` | Sets credentials for ClientCredentialsAuth. | `Builder` |
 
