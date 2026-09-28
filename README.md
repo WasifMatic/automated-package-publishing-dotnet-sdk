@@ -1,91 +1,201 @@
+# APIMatic Portal Artifacts API
 
-# Getting Started with APIMATIC Calculator
+[![Built with APIMatic][apimatic-badge]][apimatic-url] [![License: MIT][license-badge]][license-url]
 
-## Introduction
+The APIMatic Portal Artifacts API SDK for .NET provides access to the APIMatic Portal Artifacts API REST APIs from .NET applications.
 
-Simple calculator API hosted on APIMATIC
+> [!TIP]
+> **Looking for a specific signature, model, enum, or error type?** This SDK ships a generated,
+> machine-readable **[SDK map](sdk-map.md)** — a lookup index of the SDK's entire C# surface. Consult it
+> **before** grepping or scanning the source tree; it answers most contract questions directly and,
+> when a source file is genuinely needed, names the exact one to open. Details under [SDK map](#sdk-map).
 
-## Install the Package
+Generate the artifacts an APIMatic API Portal needs (SDKs, code samples, getting started guides and, optionally, a context plugin) from a Portal Build Input, asynchronously.
 
-If you are building with .NET CLI tools then you can also use the following command:
+The generation flow is:
+
+1. Upload your build directory as a zip file using **Generate Portal Artifacts Async**. You get back an `id` and links to check the status and download the artifacts.
+2. Poll **Get Portal Artifacts Generation Status** until generation completes, or pass the `X-APIMatic-CallbackUrl` header in step 1 to be notified instead.
+3. Download the generated artifacts using **Download Generated Portal Artifacts**.
+
+---
+
+## Installation
+
+To add the .NET SDK to your project from NuGet:
 
 ```bash
-dotnet add package AutomatedPackagePublishingSDK --version 1.0.42
+dotnet add package AutomatedPackagePublishingSDK
 ```
 
-You can also view the package at:
-https://www.nuget.org/packages/AutomatedPackagePublishingSDK/1.0.42
+To build against the SDK source instead, add it as a project reference into your solution:
 
-## Initialize the API Client
+```bash
+dotnet add reference <path-to-sdk>/ApiMaticPortalArtifactsApi.csproj
+```
 
-**_Note:_** Documentation for the client can be found [here.](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/client.md)
+---
 
-The following parameters are configurable for the API Client:
+## Quick Start
 
-| Parameter | Type | Description |
-|  --- | --- | --- |
-| Timeout | `TimeSpan` | Http client timeout.<br>*Default*: `TimeSpan.FromSeconds(100)` |
-| HttpClientConfiguration | [`Action<HttpClientConfiguration.Builder>`](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/http-client-configuration-builder.md) | Action delegate that configures the HTTP client by using the HttpClientConfiguration.Builder for customizing API call settings.<br>*Default*: `new HttpClient()` |
+### Dependency Injection
 
-The API client can be initialized as follows:
-
-### Code-Based Initialization
+Register the client with `IServiceCollection` and resolve it from the container. The `HttpClient` is managed by `IHttpClientFactory`. Configure the client's behavior through [ApiMaticPortalArtifactsApiClientOptions](ApiMaticPortalArtifactsApiClientOptions.cs).
 
 ```csharp
-using APIMATICCalculator.Standard;
-
-namespace ConsoleApp;
-
-APIMATICCalculatorClient client = new APIMATICCalculatorClient.Builder()
-    .HttpClientConfig(httpClientConfig =>
-        httpClientConfig.Timeout(TimeSpan.FromSeconds(100)))
-    .Build();
+services.AddApiMaticPortalArtifactsApiClient(options =>
+{
+    options.Authorization = "YOUR_API_KEY";
+    options.Environment = ServerEnvironment.Production;
+    // TODO: configure more client options here
+});
 ```
 
-### Configuration-Based Initialization
+### Direct Instantiation
+
+Create the client by passing an `HttpClient` you manage yourself. Configure the client's behavior through [ApiMaticPortalArtifactsApiClientOptions](ApiMaticPortalArtifactsApiClientOptions.cs).
 
 ```csharp
-using APIMATICCalculator.Standard;
-using Microsoft.Extensions.Configuration;
-
-namespace ConsoleApp;
-
-// Build the IConfiguration using .NET conventions (JSON, environment, etc.)
-var configuration = new ConfigurationBuilder()
-    .AddJsonFile("config.json")
-    .AddEnvironmentVariables() // [optional] read environment variables
-    .Build();
-
-// Instantiate your SDK and configure it from IConfiguration
-var client = APIMATICCalculatorClient
-    .FromConfiguration(configuration.GetSection("APIMATICCalculator"));
+var httpClient = new HttpClient();
+// TODO: configure more client options here
+var options = new ApiMaticPortalArtifactsApiClientOptions
+{
+    Authorization = "YOUR_API_KEY",
+    Environment = ServerEnvironment.Production,
+};
+var client = new ApiMaticPortalArtifactsApiClient(httpClient, options);
 ```
 
-See the [Configuration-Based Initialization](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/configuration-based-initialization.md) section for details.
+---
 
-## List of APIs
+## Usage
 
-* [Simple Calculator](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/controllers/simple-calculator.md)
+For code examples and error responses, see [API Reference](api-reference.md).
 
-## SDK Infrastructure
+## Enums
 
-### Configuration
+Every enum the spec declares is a sealed record with one `public static readonly` member per value (`PortalArtifactsGenerationStatus.InProgress`), a JSON converter, and a `Match` that makes handling exhaustive: one `on{Member}` arm per known value, then `otherwise`, which receives the raw wire value the server sent when it is one this SDK does not declare.
 
-* [Configuration-Based Initialization](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/configuration-based-initialization.md)
-* [HttpClientConfiguration](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/http-client-configuration.md)
-* [HttpClientConfigurationBuilder](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/http-client-configuration-builder.md)
-* [ProxyConfigurationBuilder](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/proxy-configuration-builder.md)
+```csharp
+var label =
+    received.Match(
+        onInProgress: () => "InProgress",
+        onFailed: () => "Failed",
+        onValidationError: () => "ValidationError",
+        onSubscriptionError: () => "SubscriptionError",
+        otherwise: raw => $"undeclared ({raw})");
+```
 
-### HTTP
+Prefer named arguments as above. The arms are positional, in the order the spec lists its values, and a regenerated SDK that adds or moves a value changes the `Match` signature: a positional call site compiled against the old shape either stops compiling or, if the assembly is not rebuilt, throws `MissingMethodException` at the first call, and a reordered value can rebind a positional argument to a different member without any diagnostic. Treat an added or moved enum value as a breaking change of that enum. Code that must survive regeneration untouched compares instead of matching: `received == PortalArtifactsGenerationStatus.InProgress` or `received.Is(rawValue)` against a raw wire value; neither reopens construction.
 
-* [HttpCallback](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/http-callback.md)
-* [HttpContext](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/http-context.md)
-* [HttpRequest](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/http-request.md)
-* [HttpResponse](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/http-response.md)
-* [HttpStringResponse](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/http-string-response.md)
+A value the SDK does not declare still round-trips: `IsKnownValue()` tells you whether it is one of the generated members, and sending the instance back echoes the server's own casing. You cannot construct an undeclared value yourself — there is no public factory — so a typo cannot compile; resolve a raw value with `PortalArtifactsGenerationStatus.TryGetKnownValue("InProgress", out var known)`.
 
-### Utilities
+A spec value whose name would collide with the enum's own name, with a member every enum inherits or generates (such as `Value`, `Match` or `IsKnownValue`), or with a member of `object` takes a `Member` suffix — a value `value` becomes `ValueMember` — and the other members keep their plain names.
 
-* [ApiException](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/api-exception.md)
-* [ApiHelper](https://www.github.com/WasifMatic/automated-package-publishing-dotnet-sdk/tree/1.0.42/doc/api-helper.md)
+## SDK map
 
+This SDK ships a generated **SDK map** — [`sdk-map.md`](sdk-map.md) plus the [`map/`](map/) pages — a deterministic, lookup-oriented table of contents of the SDK's C# surface, generated by APIMatic alongside this SDK.
+
+**Read it before scanning the source.** Whether you are an AI coding assistant or searching by hand, the map answers "what is the exact …" by lookup for every call-level contract, and for anything it does not carry it names the one file that does — so you never have to search the source tree:
+
+- **[`sdk-map.md`](sdk-map.md)** — the index: client construction, servers/auth, the options/retry reference, the SDK-wide defaults the operation rows rely on, and link tables into [`map/`](map/).
+- **[`map/operations/`](map/operations/)** — one page per controller: the exact C# signature, the return type, the error type with its typed `TryGet…` accessors, and pagination — plus, per operation, a **Type sources** table naming the file that declares every type that operation mentions.
+
+Model shapes — record fields with their JSON wire names, enum member names and wire values, `OneOf`/`AnyOf` union variants — are **not** duplicated in the map. Take the path from the operation's Type sources table and read the declaring file; it is the single source of truth and cannot go stale against the code.
+
+**Each operation row states what is specific to that operation.** The SDK-wide defaults are stated once in [`sdk-map.md`](sdk-map.md) — throw-only (no `Result`-style no-throw variants), no pagination, the four fixed `RawError` accessors, the `Default` server group — and a row appears only where its operation departs from one. A row silent on pagination is telling you that operation has none.
+
+The **HTTP verb and route**, and the endpoint's **behavioural prose**, live on the operation itself, in the source file named at the top of its operations page. Read them there when something needs them — wiring a mock, reading a provider log, or settling a rule about what you must pass.
+
+**Workflow:** look the fact up in the map → where the map leaves something ambiguous, open the **one** source file the row names → the compiler is the backstop (a name that isn't in the map won't build). Don't scan or grep the tree to find things — the map is the locator.
+
+### Which one to reach for
+
+The map and the [API Reference](api-reference.md) answer different questions, and the map is generated from this SDK's source so it stays in lockstep with the code it describes.
+
+| Use | For |
+| --- | --- |
+| **[`sdk-map.md`](sdk-map.md) + [`map/`](map/)** | Traversing the SDK and working out its surface — locating the operation you need (this SDK exposes **8 operations**), its exact signature and request record, the shape and JSON wire names of the models it takes and returns, which error type it throws and how to read it, and the source file behind any of it. This is the index to consume the SDK from, and the one to reach for first. |
+| **[`api-reference.md`](api-reference.md)** | Usage guidance for a single operation once you know which one you want — a runnable code sample, a link to its request record, and the error responses it can return. |
+
+## Error Handling
+
+Operations throw when the server answers with an error status. `TError` is the operation's error type from the spec — `RawError` (the status code plus the raw body) when the spec declares none.
+
+```csharp
+using ApiMaticPortalArtifactsApi.Core.Exceptions;                           // the exception family
+using ApiMaticPortalArtifactsApi.Errors;                                    // generated error types such as DownloadGeneratedPortalArtifactsError
+using ApiMaticPortalArtifactsApi.Requests.PortalArtifactsGenerationAsync;   // request records such as DownloadGeneratedPortalArtifactsRequest
+
+try
+{
+    await client.PortalArtifactsGenerationAsync.DownloadGeneratedPortalArtifacts(
+        new DownloadGeneratedPortalArtifactsRequest { Id = Guid.Parse("019992a4-5c3e-7b21-9f0a-3d6e8c1b2a47") });
+}
+catch (ApiException<DownloadGeneratedPortalArtifactsError> ex)
+{
+    // "GET <server>/portal-artifacts/{id}/download returned 400 (BadRequest)."
+    Console.Error.WriteLine(ex.Message);
+    if (ex.Error.TryGetProblemDetails(out var problemDetails))
+    {
+        // TODO: handle 'problemDetails' of type ProblemDetails
+    }
+}
+```
+
+Everything the SDK raises for a call derives from `SdkException`, which carries the failed call's `Method` and `RequestUri`. Every message starts with that call, and the underlying cause is always `InnerException`.
+
+| Exception | When | Extra members |
+| --- | --- | --- |
+| `ApiException<TError>` | The server answered with an error status | `Error`, plus `StatusCode`, `Headers` and `ContentType` from `ApiException` |
+| `ResponseDeserializationException` | A response body did not match the type the spec declares | `TargetType`, plus the `ApiException` members |
+| `SdkConnectionException` | The request could not be sent, or the response body could not be read |  |
+| `SdkTimeoutException` | An attempt, the transport, or a Server-Sent Events stream went silent (derives from `SdkConnectionException`) | `Timeout` |
+| `AuthSchemeException` | A credential could not be applied — for example the OAuth2 token endpoint refused it | `SchemeFailures` |
+
+Catch from specific to general: `ApiException` means the server answered, `SdkConnectionException` means it did not, and `SdkException` is everything the SDK raises. Your own cancellation surfaces as the usual `OperationCanceledException`, never wrapped.
+
+---
+
+## Best Practices
+
+> [!TIP]
+> Use a **single `ApiMaticPortalArtifactsApiClient` instance** for the lifetime of your application and
+> reuse it across all requests. Creating a new instance per request might exhaust the
+> connection pool.
+
+> [!TIP]
+> Let the SDK own timeouts. `RetryOptions.Timeout` bounds **each attempt** (default 100 s)
+> and a timed-out attempt is retried under the configured retry policy before it surfaces as
+> `SdkTimeoutException`; `Retry-After` response headers are honored when the server sends them.
+> Set `HttpClient.Timeout` to `Timeout.InfiniteTimeSpan` (or comfortably above
+> `RetryOptions.Timeout`) so the transport does not race the SDK — a transport-level timeout
+> surfaces as the same `SdkTimeoutException` but cannot be retried.
+
+> [!TIP]
+> The SDK reads time only through `ApiMaticPortalArtifactsApiClientOptions.TimeProvider` (default
+> `TimeProvider.System`): retry backoff, `Retry-After`, the SSE idle timeout, OAuth2 token
+> expiry and the logged request durations all follow it. Under `AddApiMaticPortalArtifactsApiClient` a
+> `TimeProvider` registered in the container is picked up automatically, and setting the
+> option explicitly wins. To fake time in your own tests use a provider that implements
+> timers, such as `FakeTimeProvider` from `Microsoft.Extensions.TimeProvider.Testing`, so
+> retries and idle timeouts advance with it.
+
+## License
+
+This SDK is distributed under the [MIT License](LICENSE).
+
+---
+
+## Support
+
+Refer to the [API reference](api-reference.md) for detailed information on available operations with code samples.
+
+For further assistance, please contact support at contactus@apimatic.io.
+
+---
+
+[license-url]: LICENSE
+[license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
+[apimatic-url]: https://www.apimatic.io
+[apimatic-badge]: https://www.apimatic.io/hubfs/Built-with-APIMatic-badge.svg
